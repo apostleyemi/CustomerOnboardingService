@@ -38,6 +38,15 @@ namespace CustomerOnboardingService.Controllers
 			return Ok(response);
 		}
 
+		[HttpGet]
+		[Route("GetNewOtp")]
+		public async Task<IActionResult> GetNewOtp(OtpValidatorDTO model)
+		{
+			var response = await _otp.GenerateNewOtp(model);
+
+			return Ok(response);
+		}
+
 		[HttpPost]
 		[Route("VerifyCustomer")]
 		public async Task<IActionResult> VerifyCustomer(VerifyCustomerDto model)

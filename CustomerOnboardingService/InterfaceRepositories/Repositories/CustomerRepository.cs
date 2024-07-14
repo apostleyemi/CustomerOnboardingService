@@ -47,14 +47,14 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 				var result =_dbContext.SaveChanges();
 				if(result >0)
 				{
-					var OtpVerifyModel=new OtpValidatorDTO
+					var OtpVerifyModel = new OtpValidatorDTO
 					{
-						Email=model.Email,
-						Otp
-					}
+						Email = model.Email,
+						Otp = ""
+					};
 					// generate otp 
-					var otpGenerated = _otpService.GenerateNewOtp();
-					string response=await SaveOtp(newCustomer, otpGenerated);
+					var otpGenerated = _otpService.GenerateNewOtp(OtpVerifyModel);
+					string response=await _otpService.SaveOtp(newCustomer, otpGenerated.ToString());
 					if (response == "Success!")
 					{
 						return "Customer Registered, Otp sent for verification";
