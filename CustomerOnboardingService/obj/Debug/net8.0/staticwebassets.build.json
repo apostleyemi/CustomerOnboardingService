@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "GbJURBUWCy9pOddIrkS/PvXHiL/KO0SjGr7HwewYZ3o=",
+  "Source": "CustomerOnboardingService",
+  "BasePath": "_content/CustomerOnboardingService",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
