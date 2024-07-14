@@ -22,7 +22,8 @@ opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 builder.Services.AddScoped<ICustomer, CustomerRepository>();
 builder.Services.AddScoped<IOtp, OtpRepository>();
 builder.Services.AddScoped<IStateLocalgov, StateLocalGovRepository>();
-
+builder.Services.AddScoped<IBank, BankRepository>();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
