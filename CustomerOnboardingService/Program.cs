@@ -24,6 +24,7 @@ builder.Services.AddScoped<IOtp, OtpRepository>();
 builder.Services.AddScoped<IStateLocalgov, StateLocalGovRepository>();
 builder.Services.AddScoped<IBank, BankRepository>();
 builder.Services.AddHttpClient();
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 

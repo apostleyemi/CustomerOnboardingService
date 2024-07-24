@@ -1,4 +1,5 @@
-﻿using CustomerOnboardingService.Data;
+﻿using AutoMapper;
+using CustomerOnboardingService.Data;
 using CustomerOnboardingService.DTOs;
 using CustomerOnboardingService.InterfaceRepositories.Interfaces;
 using CustomerOnboardingService.Models;
@@ -12,16 +13,18 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 		private readonly AppDbContext _dbContext;
 		private readonly ILogger<CustomerRepository> _logger;
 		private readonly IOtp _otpService;
+		private readonly IMapper _mapper;
 
 
-		public CustomerRepository(AppDbContext dbContext, ILogger<CustomerRepository> logger, IOtp otpservice)
+		public CustomerRepository(AppDbContext dbContext, ILogger<CustomerRepository> logger, IOtp otpservice, IMapper mapper)
 		{
 			_dbContext = dbContext;
 			_logger = logger;
 			_otpService = otpservice;
+			_mapper = mapper;
 		}
 
-		public async Task<string> OnBoardCustomer(CustomerDTO model)
+		public async Task<CustomerDTO> OnBoardCustomer(CustomerDTO model)
 		{
 			try
 			{
@@ -31,17 +34,20 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 
 				if (IsCustomerIsExist != null)
 				{
-					return "Failed! Customer with this record already exists";
+					return null;
 				}
 
-				var newCustomer = new Customer
+				// use auto mapper here 
+				var newCustomer = _mapper.Map<Customer>(model);
+
+				/*var newCustomer = new Customer
 				{
 					Email = model.Email,
 					LgaId = model.LgaId,
 					Password= BCrypt.Net.BCrypt.HashPassword(model.Password),
 					Phone = model.Phone,			
 
-				};
+				};*/
 
 				await _dbContext.customers.AddAsync(newCustomer);
 				var result =_dbContext.SaveChanges();
@@ -57,7 +63,7 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 					string response=await _otpService.SaveOtp(newCustomer, otpGenerated.ToString());
 					if (response == "Success!")
 					{
-						return "Customer Registered, Otp sent for verification";
+						return _mapper.Map<CustomerDTO>(newCustomer);
 
 					}
 
@@ -65,14 +71,14 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 
 				}
 				// failed to register 
-				return "Failed! Try again later ";
+				return null;
 			}
 			catch (Exception ex)
 			{
                 Console.WriteLine(	ex);
 
             }
-			return "Failed!";
+			return null;
 
 
 		}
@@ -86,7 +92,9 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 				.Where(c => c.IsVarified == true).ToListAsync();
 			if(customers.Count == 0) { return null; }
 
-			var customerDtoList=new List<CustomerDTO>();
+			var customerDtoList = _mapper.Map<List<CustomerDTO>>(customers);
+
+			/*var customerDtoList=new List<CustomerDTO>();
 
 			foreach (var custom in customers)
 			{
@@ -103,7 +111,7 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 
 				customerDtoList.Add(Customer);
 
-			}
+			}*/
 
 			return customerDtoList;
 

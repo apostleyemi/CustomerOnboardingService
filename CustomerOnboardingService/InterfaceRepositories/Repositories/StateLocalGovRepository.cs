@@ -1,4 +1,5 @@
-﻿using CustomerOnboardingService.Data;
+﻿using AutoMapper;
+using CustomerOnboardingService.Data;
 using CustomerOnboardingService.DTOs;
 using CustomerOnboardingService.InterfaceRepositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -9,18 +10,23 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 	public class StateLocalGovRepository : IStateLocalgov
 	{
 		private readonly AppDbContext _dbContext;
-
-		public StateLocalGovRepository(AppDbContext dbContext)
+		private readonly IMapper _mapper;
+		public StateLocalGovRepository(AppDbContext dbContext, IMapper mapper)
 		{
 			_dbContext = dbContext;
+			_mapper = mapper;
 		}
 
-		public async Task<StateListDTO> GetLocalGovernmentByStateId(int stateId)
+		public async Task<List<LocalgovernmentDto>> GetLocalGovernmentByStateId(int stateId)
 		{
 			var statedata=await _dbContext
 				.stateLists.Where(s=>s.Id==stateId)
 				.Include(l=>l.lacalGovernments).FirstOrDefaultAsync();
-			var stateAndLocalGov = new StateListDTO();
+
+
+			var stateAndLocalGovs =
+				_mapper.Map<List<LocalgovernmentDto>>(statedata);
+			/*var stateAndLocalGov = new StateListDTO();
 
 
 			stateAndLocalGov.Id = statedata.Id;
@@ -37,12 +43,12 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 				localgovDto.LgaName = localgov.LgaName;
 
 				localGovCollection.Add(localgovDto);
-			}
+			}*/
 
-			stateAndLocalGov.LocalgovernmentList = localGovCollection;
+			/*	stateAndLocalGov.LocalgovernmentList = localGovCollection;*/
 
 
-			return stateAndLocalGov;
+			return stateAndLocalGovs;
 		}
 
 		public async Task<ICollection<StateListDTO>> GetStateLocalGov()
@@ -50,9 +56,10 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 			var stateData = await _dbContext.stateLists
 				.Include(l => l.lacalGovernments).ToListAsync();
 
-			var stateDtoList = new Collection<StateListDTO>();
+			var stateDtoList =_mapper.Map<List<StateListDTO>>(stateData);
+			//var stateDtoList = new Collection<StateListDTO>();
 
-			foreach (var state in stateData)
+			/*foreach (var state in stateData)
 			{
 				var stateDto = new StateListDTO();
 				stateDto.StateName = state.StateName;
@@ -73,7 +80,7 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 				stateDto.LocalgovernmentList = stateLocaGovList;
 
 				stateDtoList.Add(stateDto);
-			}
+			}*/
 
 			return stateDtoList;
 		}

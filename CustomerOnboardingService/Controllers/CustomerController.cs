@@ -1,4 +1,5 @@
-﻿using CustomerOnboardingService.DTOs;
+﻿using AutoMapper;
+using CustomerOnboardingService.DTOs;
 using CustomerOnboardingService.InterfaceRepositories.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +14,14 @@ namespace CustomerOnboardingService.Controllers
 	{
 		private readonly IOtp _otp;
 		private readonly ICustomer _customer;
+		private readonly IMapper _mapper;
 
 
-		public CustomerController(IOtp otp, ICustomer customer)
+		public CustomerController(IOtp otp, ICustomer customer, IMapper mapper)
 		{
 			_otp = otp;
 			_customer = customer;
+			_mapper = mapper;
 		}
 
 		[HttpPost]
@@ -33,7 +36,7 @@ namespace CustomerOnboardingService.Controllers
 		[Route("GetAllOnboarded")]
 		public async Task<IActionResult> GetAllOnboarded()
 		{
-			var response =await _customer.GetOnBoardedCustomer();
+			List<CustomerDTO> response =await _customer.GetOnBoardedCustomer();
 
 			return Ok(response);
 		}

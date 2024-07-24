@@ -4,7 +4,7 @@ namespace CustomerOnboardingService.InterfaceRepositories.Interfaces
 {
 	public interface ICustomer
 	{
-		 Task<string> OnBoardCustomer(CustomerDTO model);
+		Task<CustomerDTO> OnBoardCustomer(CustomerDTO model);
 		Task<List<CustomerDTO>> GetOnBoardedCustomer();
 
 		Task<string> VerifyCustomer(VerifyCustomerDto model);
