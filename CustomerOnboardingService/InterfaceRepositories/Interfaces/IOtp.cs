@@ -9,6 +9,6 @@ namespace CustomerOnboardingService.InterfaceRepositories.Interfaces
 		//Task<string> VerifyOtp(OtpValidatorDTO model);
 		Task<string> InvalidateOtp(VerifyCustomerDto model);
 		Task<string> SaveOtp(Customer model, string otpGenerated);
-		Task<string> GenerateNewOtp(OtpValidatorDTO model);
+		Task<string> GenerateNewOtp(GetOtpDTO model);
 	}
 }

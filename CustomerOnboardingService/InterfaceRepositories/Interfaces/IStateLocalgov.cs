@@ -6,6 +6,6 @@ namespace CustomerOnboardingService.InterfaceRepositories.Interfaces
 	{
 
 		Task<ICollection<StateListDTO>> GetStateLocalGov();
-		Task<List<LocalgovernmentDto>> GetLocalGovernmentByStateId(int stateId);
+		Task<StateListDTO> GetLocalGovernmentByStateId(int stateId);
 	}
 }

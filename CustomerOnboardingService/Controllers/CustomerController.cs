@@ -41,9 +41,9 @@ namespace CustomerOnboardingService.Controllers
 			return Ok(response);
 		}
 
-		[HttpGet]
+		[HttpPost]
 		[Route("GetNewOtp")]
-		public async Task<IActionResult> GetNewOtp(OtpValidatorDTO model)
+		public async Task<IActionResult> GetNewOtp([FromBody]GetOtpDTO model)
 		{
 			var response = await _otp.GenerateNewOtp(model);
 
@@ -52,7 +52,7 @@ namespace CustomerOnboardingService.Controllers
 
 		[HttpPost]
 		[Route("VerifyCustomer")]
-		public async Task<IActionResult> VerifyCustomer(VerifyCustomerDto model)
+		public async Task<IActionResult> VerifyCustomer([FromBody] VerifyCustomerDto model)
 		{
 			var response = await _customer.VerifyCustomer(model);
 			return Ok(response);

@@ -82,7 +82,7 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 
 		}*/
 
-		public async Task<string> GenerateNewOtp(OtpValidatorDTO model)
+		public async Task<string> GenerateNewOtp(GetOtpDTO model)
 		{
 			var customerData = await _dbContext.customers
 				.Where(e => e.Email == model.Email).FirstOrDefaultAsync();
@@ -91,6 +91,21 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 			{ return "Customer Already verified"; }
 
 			var newOtp=GenerateOtp();
+
+			// log the otp with customer details 
+			var otpGenerated = new OtpVerification
+			{
+				Email = model.Email,
+				IsValid = false,
+				Otp = newOtp,
+				CreatedAt = DateTime.Now,
+				ValidTill = DateTime.Now.AddMinutes(30)
+
+			};
+
+		  var  otpdata=	await _dbContext.otpVerifications.AddAsync(otpGenerated);
+
+			var result = await _dbContext.SaveChangesAsync();
 
 
 			return newOtp;
@@ -104,7 +119,7 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 		{
 			Random randN = new Random();
 
-			return randN.Next(5, 10).ToString();
+			return randN.Next(5000, 100000).ToString();
 		}
 
 		public async Task<string> SaveOtp(Customer model, string otpGenerated)

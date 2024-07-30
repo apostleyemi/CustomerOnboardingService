@@ -19,4 +19,8 @@
         public string Otp { get; set; }
         public string Email { get; set; }
     }
+	public class GetOtpDTO
+	{
+        public string Email { get; set; }
+    }
 }

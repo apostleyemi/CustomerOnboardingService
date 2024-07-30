@@ -17,7 +17,7 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 			_mapper = mapper;
 		}
 
-		public async Task<List<LocalgovernmentDto>> GetLocalGovernmentByStateId(int stateId)
+		public async Task<StateListDTO> GetLocalGovernmentByStateId(int stateId)
 		{
 			var statedata=await _dbContext
 				.stateLists.Where(s=>s.Id==stateId)
@@ -25,7 +25,7 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 
 
 			var stateAndLocalGovs =
-				_mapper.Map<List<LocalgovernmentDto>>(statedata);
+				_mapper.Map<StateListDTO>(statedata);
 			/*var stateAndLocalGov = new StateListDTO();
 
 

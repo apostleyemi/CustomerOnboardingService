@@ -53,10 +53,10 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 				var result =_dbContext.SaveChanges();
 				if(result >0)
 				{
-					var OtpVerifyModel = new OtpValidatorDTO
+					var OtpVerifyModel = new GetOtpDTO
 					{
 						Email = model.Email,
-						Otp = ""
+						
 					};
 					// generate otp 
 					var otpGenerated = _otpService.GenerateNewOtp(OtpVerifyModel);
@@ -135,7 +135,7 @@ namespace CustomerOnboardingService.InterfaceRepositories.Repositories
 			var OtpCheck =await _dbContext.otpVerifications
 				.Where(o=>o.Email == model.Email).FirstOrDefaultAsync();
 
-			if (!OtpCheck.IsValid || OtpCheck.ValidTill < DateTime.Now 
+			if (OtpCheck.IsValid==false || OtpCheck.ValidTill < DateTime.Now 
 				|| OtpCheck.Otp !=model.OtpReceived)
 			{ return "Otp is no longer valid, rquest for new"; }
 

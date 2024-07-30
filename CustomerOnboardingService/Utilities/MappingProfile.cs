@@ -19,10 +19,12 @@ namespace CustomerOnboardingService.Utilities
 			CreateMap<StateList, StateListDTO>()
 			.ForMember(dest => dest.LocalgovernmentList,
 			opt => opt.MapFrom(src => src.lacalGovernments));
-			CreateMap<LacalGovernment, LocalgovernmentDto>();
+			
+		
 			CreateMap<StateListDTO, StateList>()
 				.ForMember(dest => dest.lacalGovernments,
 				opt => opt.MapFrom(src => src.LocalgovernmentList));
+			CreateMap<LacalGovernment, LocalgovernmentDto>();
 			CreateMap<LocalgovernmentDto, LacalGovernment>();
 
 		}
